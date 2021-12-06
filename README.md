@@ -1,3 +1,5 @@
+今日のお昼はnullでした🍐
+
 # first-study-nuxt
 
 ## Build Setup
