@@ -185,6 +185,7 @@ export default {
       chartData: [],
       chartOptions: {
         region: 'JP',
+        colors: ['#00ACC1'],
         width: 600,
         height: 300,
       },
