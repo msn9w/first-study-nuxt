@@ -72,7 +72,7 @@
                           class="mx-8"
                           fab
                           x-large
-                          @click="chartLabel = 1"
+                          @click="chartLabel = 3"
                         >
                           <v-icon x-large>mdi-baby</v-icon>
                         </v-btn>
@@ -89,7 +89,7 @@
                           class="mx-8"
                           fab
                           x-large
-                          @click="chartLabel = 2"
+                          @click="chartLabel = 4"
                         >
                           <v-icon x-large>mdi-coffin</v-icon>
                         </v-btn>
@@ -106,7 +106,7 @@
                           class="mx-8"
                           fab
                           x-large
-                          @click="chartLabel = 3"
+                          @click="chartLabel = 1"
                         >
                           <v-icon x-large>mdi-airplane-landing</v-icon>
                         </v-btn>
@@ -123,7 +123,7 @@
                           class="mx-8"
                           fab
                           x-large
-                          @click="chartLabel = 4"
+                          @click="chartLabel = 2"
                         >
                           <v-icon x-large>mdi-airplane-takeoff</v-icon>
                         </v-btn>
@@ -151,7 +151,11 @@
 
         <v-stepper-content step="3">
           <v-row justify="center" v-if="isSuccess">
-            <GChart :type="chartType" :data="chartData" />
+            <GChart
+              :type="chartType"
+              :data="chartData"
+              :options="chartOptions"
+            />
           </v-row>
           <v-row no-gutters style="height: 60px" align="end" justify="end">
             <v-btn color="primary" @click="e1 = 1">最初から</v-btn>
@@ -175,10 +179,15 @@ export default {
       inputPrefname: '',
       inputCityname: '',
       prefCode: '',
-      cityCode: '',
+      cityCode: '-',
       chartLabel: '1',
-      chartType: 'ColumnChart',
+      chartType: 'LineChart',
       chartData: [],
+      chartOptions: {
+        region: 'JP',
+        width: 600,
+        height: 300,
+      },
       isSuccess: false,
     }
   },
@@ -226,9 +235,10 @@ export default {
             },
           }
         )
+        console.log(res)
         const resasResponce = res.data.result.data[this.chartLabel].data
         const dataset = resasResponce.map((item) => [item.year, item.value])
-        this.chartData = [['年', '人口']]
+        this.chartData = [['年', '(人)']]
         for (let i = 0; i < dataset.length; i++) {
           this.chartData.push(dataset[i])
         }

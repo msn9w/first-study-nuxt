@@ -58,10 +58,10 @@ export default {
       light: true,
       themes: {
         light: {
-          primary: colors.purple,
+          primary: colors.cyan,
           secondary: colors.grey.darken1,
           accent: colors.shades.black,
-          error: colors.red.accent3,
+          error: colors.deepOrange.accent3,
         },
         dark: {
           primary: colors.blue.darken2,
