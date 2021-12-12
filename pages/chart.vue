@@ -1,24 +1,165 @@
 <template>
   <div>
-    <v-row>
-      <v-text-field
-        v-model="inputPrefname"
-        :counter="10"
-        label="都道府県"
-      ></v-text-field>
-      <v-text-field
-        class="ml-6"
-        v-model="inputCityname"
-        :counter="30"
-        label="市区町村"
-      ></v-text-field>
-    </v-row>
-    <div v-if="isSuccess">
-      <GChart :type="chartType" :data="chartData" />
-    </div>
-    <v-row justify="end">
-      <v-btn @click="drawChart()">取得</v-btn>
-    </v-row>
+    <v-stepper v-model="e1">
+      <v-stepper-header>
+        <v-stepper-step :complete="e1 > 1" step="1"> 地域 </v-stepper-step>
+
+        <v-divider> </v-divider>
+
+        <v-stepper-step :complete="e1 > 2" step="2">
+          表示データ
+        </v-stepper-step>
+
+        <v-divider></v-divider>
+
+        <v-stepper-step step="3"> グラフ </v-stepper-step>
+      </v-stepper-header>
+
+      <v-stepper-items>
+        <v-stepper-content step="1">
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="inputPrefname"
+                :counter="10"
+                label="都道府県"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="inputCityname"
+                :counter="30"
+                label="市区町村"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row no-gutters style="height: 60px" align="end" justify="end">
+            <v-btn color="primary" @click="e1 = 2">決定</v-btn>
+            <v-btn text>クリア</v-btn>
+          </v-row>
+        </v-stepper-content>
+
+        <v-stepper-content step="2">
+          <v-card flat class="py-12">
+            <v-card-text>
+              <v-row align="center" justify="center">
+                <v-btn-toggle v-model="toggle_exclusive" mandatory>
+                  <div>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          class="mx-8"
+                          fab
+                          x-large
+                          @click="chartLabel = 0"
+                        >
+                          <v-icon x-large>mdi-human-male-female</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>総人口</span>
+                    </v-tooltip>
+                  </div>
+                  <div>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          class="mx-8"
+                          fab
+                          x-large
+                          @click="chartLabel = 1"
+                        >
+                          <v-icon x-large>mdi-baby</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>出生数</span>
+                    </v-tooltip>
+                  </div>
+                  <div>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          class="mx-8"
+                          fab
+                          x-large
+                          @click="chartLabel = 2"
+                        >
+                          <v-icon x-large>mdi-coffin</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>死亡数</span>
+                    </v-tooltip>
+                  </div>
+                  <div>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          class="mx-8"
+                          fab
+                          x-large
+                          @click="chartLabel = 3"
+                        >
+                          <v-icon x-large>mdi-airplane-landing</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>転入数</span>
+                    </v-tooltip>
+                  </div>
+                  <div>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          v-bind="attrs"
+                          v-on="on"
+                          class="mx-8"
+                          fab
+                          x-large
+                          @click="chartLabel = 4"
+                        >
+                          <v-icon x-large>mdi-airplane-takeoff</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>転出数</span>
+                    </v-tooltip>
+                  </div>
+                </v-btn-toggle>
+              </v-row>
+            </v-card-text>
+          </v-card>
+          <v-row no-gutters style="height: 60px" align="end" justify="end">
+            <v-btn
+              color="primary"
+              @click="
+                e1 = 3
+                drawChart()
+              "
+            >
+              決定
+            </v-btn>
+            <v-btn text @click="e1 = 1">ひとつ戻る</v-btn>
+          </v-row>
+        </v-stepper-content>
+
+        <v-stepper-content step="3">
+          <v-row justify="center" v-if="isSuccess">
+            <GChart :type="chartType" :data="chartData" />
+          </v-row>
+          <v-row no-gutters style="height: 60px" align="end" justify="end">
+            <v-btn color="primary" @click="e1 = 1">最初から</v-btn>
+            <v-btn text @click="e1 = 2">ひとつ戻る</v-btn>
+          </v-row>
+        </v-stepper-content>
+      </v-stepper-items>
+    </v-stepper>
   </div>
 </template>
 
@@ -30,10 +171,12 @@ export default {
   },
   data() {
     return {
+      e1: '1',
       inputPrefname: '',
       inputCityname: '',
       prefCode: '',
       cityCode: '',
+      chartLabel: '1',
       chartType: 'ColumnChart',
       chartData: [],
       isSuccess: false,
@@ -76,14 +219,14 @@ export default {
       await this.getPrefCityCode()
       try {
         const res = await this.$axios.get(
-          `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=${this.cityCode}&prefCode=${this.prefCode}`,
+          `https://opendata.resas-portal.go.jp/api/v1/population/sum/estimate?cityCode=${this.cityCode}&prefCode=${this.prefCode}`,
           {
             headers: {
               'X-API-KEY': key,
             },
           }
         )
-        const resasResponce = res.data.result.data[0].data
+        const resasResponce = res.data.result.data[this.chartLabel].data
         const dataset = resasResponce.map((item) => [item.year, item.value])
         this.chartData = [['年', '人口']]
         for (let i = 0; i < dataset.length; i++) {
