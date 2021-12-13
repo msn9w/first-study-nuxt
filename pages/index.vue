@@ -1,17 +1,17 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
+    <v-col>
       <v-container>
         <v-row>
-          <v-col cols="auto" md="4">
+          <v-col>
             <v-text-field
               v-model="inputName"
               :counter="30"
               label="user name"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="auto" >
-            <v-btn @click="searchGithubAccount()">🔍</v-btn>
+              append-outer-icon="mdi-magnify"
+              @click:append-outer="searchGithubAccount()"
+            >
+            </v-text-field>
           </v-col>
         </v-row>
       </v-container>

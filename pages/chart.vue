@@ -21,6 +21,7 @@
             <v-col>
               <v-text-field
                 v-model="inputPrefname"
+                :rules="rules"
                 :counter="10"
                 label="都道府県"
               ></v-text-field>
@@ -36,7 +37,7 @@
             </v-col>
           </v-row>
           <v-row no-gutters style="height: 60px" align="end" justify="end">
-            <v-btn color="primary" @click="e1 = 2">決定</v-btn>
+            <v-btn :color="buttonColor" @click="moveTwo()">決定</v-btn>
             <v-btn text>クリア</v-btn>
           </v-row>
         </v-stepper-content>
@@ -45,7 +46,7 @@
           <v-card flat class="py-12">
             <v-card-text>
               <v-row align="center" justify="center">
-                <v-btn-toggle v-model="toggle_exclusive" mandatory>
+                <v-btn-toggle mandatory>
                   <div>
                     <v-tooltip bottom>
                       <template v-slot:activator="{ on, attrs }">
@@ -150,7 +151,7 @@
         </v-stepper-content>
 
         <v-stepper-content step="3">
-          <v-row justify="center" v-if="isSuccess">
+          <v-row justify="center" v-if="this.isSuccess">
             <GChart
               :type="chartType"
               :data="chartData"
@@ -175,7 +176,6 @@ export default {
   },
   data() {
     return {
-      e1: '1',
       inputPrefname: '',
       inputCityname: '',
       prefCode: '',
@@ -190,6 +190,8 @@ export default {
         height: 300,
       },
       isSuccess: false,
+      e1: '1',
+      rules: [(value) => !!value || '必須項目です'],
     }
   },
   methods: {
@@ -249,6 +251,17 @@ export default {
         console.log('エラーが起こりました')
         this.isSuccess = false
       }
+    },
+    moveTwo() {
+      if (this.inputPrefname) {
+        this.e1 = 2
+      }
+    },
+  },
+  computed: {
+    buttonColor: function () {
+      if (this.inputPrefname) return 'primary'
+      else return 'gray'
     },
   },
 }
