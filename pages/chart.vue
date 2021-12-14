@@ -2,7 +2,7 @@
   <div>
     <v-stepper v-model="e1">
       <v-stepper-header>
-        <v-stepper-step :complete="e1 > 1" step="1"> 地域 </v-stepper-step>
+        <v-stepper-step :complete="e1 > 1" step="1">地域</v-stepper-step>
 
         <v-divider> </v-divider>
 
@@ -12,7 +12,7 @@
 
         <v-divider></v-divider>
 
-        <v-stepper-step step="3"> グラフ </v-stepper-step>
+        <v-stepper-step step="3">グラフ</v-stepper-step>
       </v-stepper-header>
 
       <v-stepper-items>
@@ -38,7 +38,14 @@
           </v-row>
           <v-row no-gutters style="height: 60px" align="end" justify="end">
             <v-btn :color="buttonColor" @click="moveTwo()">決定</v-btn>
-            <v-btn text>クリア</v-btn>
+            <v-btn
+              text
+              @click="
+                inputPrefname = ''
+                inputCityname = ''
+              "
+              >クリア</v-btn
+            >
           </v-row>
         </v-stepper-content>
 
