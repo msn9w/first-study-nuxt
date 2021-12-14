@@ -78,6 +78,9 @@ export default {
   generate: {
     dir: 'docs'
   },
+  router: {
+    base: '/first-study-nuxt',
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }
