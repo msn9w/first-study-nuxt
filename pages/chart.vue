@@ -187,14 +187,14 @@ export default {
       inputCityname: '',
       prefCode: '',
       cityCode: '-',
-      chartLabel: '1',
+      chartLabel: '0',
       chartType: 'LineChart',
       chartData: [],
       chartOptions: {
         region: 'JP',
         colors: ['#00ACC1'],
-        width: 600,
-        height: 300,
+        width: '600',
+        height: '400',
       },
       isSuccess: false,
       e1: '1',
@@ -247,12 +247,22 @@ export default {
         )
         console.log(res)
         const resasResponce = res.data.result.data[this.chartLabel].data
-        const dataset = resasResponce.map((item) => [item.year, item.value])
-        this.chartData = [['年', '(人)']]
+        const boundaryYear = res.data.result.boundaryYear
+        const labelName = res.data.result.data[this.chartLabel].label
+        const dataset = resasResponce.map((item) => [
+          item.year,
+          item.value,
+          true,
+        ])
+        this.chartData = [['年', `${labelName}`, { role: 'certainty' }]]
+        console.log(this.chartData)
         for (let i = 0; i < dataset.length; i++) {
+          const year = dataset[i][0]
+          if (year > boundaryYear) {
+            dataset[i][2] = false
+          }
           this.chartData.push(dataset[i])
         }
-        console.log(resasResponce)
         this.isSuccess = true
       } catch (error) {
         console.log('エラーが起こりました')
